@@ -140,10 +140,23 @@ export interface PerformanceSummary {
     dns: { value: number; rating: 'good' | 'needs-improvement' | 'poor' }; // DNS解析时间
     tcp: { value: number; rating: 'good' | 'needs-improvement' | 'poor' }; // TCP连接时间
     dom: { value: number; rating: 'good' | 'needs-improvement' | 'poor' }; // DOM解析时间
-    firstScreen: { value: number; rating: 'good' | 'needs-improvement' | 'poor' }; // 首屏加载时间
-    whiteScreen: { value: number; rating: 'good' | 'needs-improvement' | 'poor' }; // 白屏时间
-    resourceLoad: { value: number; rating: 'good' | 'needs-improvement' | 'poor' }; // 资源加载时间
-    longTask: { count: number; duration: number; rating: 'good' | 'needs-improvement' | 'poor' }; // 长任务
+    firstScreen: {
+      value: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 首屏加载时间
+    whiteScreen: {
+      value: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 白屏时间
+    resourceLoad: {
+      value: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 资源加载时间
+    longTask: {
+      count: number;
+      duration: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 长任务
   };
   webVitals: {
     lcp: { value: number; rating: 'good' | 'needs-improvement' | 'poor' };
@@ -156,6 +169,34 @@ export interface PerformanceSummary {
     totalResources: number;
     totalBytes: number;
     byType: Record<string, { count: number; bytes: number }>;
+  };
+  // API接口性能指标
+  apiPerformance: {
+    totalApiCalls: number; // API调用总数
+    averageResponseTime: number; // 平均响应时间
+    successRate: number; // 成功率(百分比)
+    slowestApi: {
+      name: string;
+      duration: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 最慢的API
+    fastestApi: {
+      name: string;
+      duration: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 最快的API
+    p95ResponseTime: {
+      value: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 95分位响应时间
+    errorRate: {
+      value: number;
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 错误率
+    throughput: {
+      value: number; // 每秒请求数
+      rating: 'good' | 'needs-improvement' | 'poor';
+    }; // 吞吐量
   };
 }
 
@@ -439,7 +480,7 @@ let mockPerformanceMetrics: Record<string, PerformanceMetric[]> = {
       unloadTime: 15,
       secureConnectionTime: 60,
       pageUrl: 'https://example.com/user/login',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
     },
     {
       id: 'perf-2',
@@ -449,7 +490,7 @@ let mockPerformanceMetrics: Record<string, PerformanceMetric[]> = {
       value: 2400,
       element: 'IMG',
       pageUrl: 'https://example.com/user/dashboard',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
     },
     {
       id: 'perf-3',
@@ -459,7 +500,7 @@ let mockPerformanceMetrics: Record<string, PerformanceMetric[]> = {
       value: 85,
       element: 'BUTTON',
       pageUrl: 'https://example.com/user/profile',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
     },
     {
       id: 'perf-4',
@@ -472,8 +513,8 @@ let mockPerformanceMetrics: Record<string, PerformanceMetric[]> = {
       startTime: 1000,
       responseEnd: 1150,
       pageUrl: 'https://example.com/user/login',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-    }
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+    },
   ],
   'project-2': [
     {
@@ -503,7 +544,8 @@ let mockPerformanceMetrics: Record<string, PerformanceMetric[]> = {
       unloadTime: 20,
       secureConnectionTime: 90,
       pageUrl: 'https://example.com/product/list',
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+      userAgent:
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
     },
     {
       id: 'perf-6',
@@ -512,8 +554,9 @@ let mockPerformanceMetrics: Record<string, PerformanceMetric[]> = {
       metric: 'CLS',
       value: 0.25,
       pageUrl: 'https://example.com/product/detail/123',
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-    }
+      userAgent:
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+    },
   ],
   'project-3': [
     {
@@ -543,9 +586,9 @@ let mockPerformanceMetrics: Record<string, PerformanceMetric[]> = {
       unloadTime: 10,
       secureConnectionTime: 45,
       pageUrl: 'https://example.com/employee/dashboard',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-    }
-  ]
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+    },
+  ],
 };
 
 // 新增：模拟录屏数据
@@ -566,6 +609,24 @@ const mockRecordings: Record<string, any> = {
     ],
   },
 };
+
+// 在文件顶部添加计数器 - 使用更好的ID生成策略
+let performanceMetricCounter = 0;
+let lastTimestamp = 0;
+
+// 生成唯一ID的函数
+function generateUniquePerformanceId(): string {
+  const now = Date.now();
+  if (now === lastTimestamp) {
+    performanceMetricCounter++;
+  } else {
+    lastTimestamp = now;
+    performanceMetricCounter = 0;
+  }
+  // 添加随机字符串确保绝对唯一性
+  const randomSuffix = Math.random().toString(36).substr(2, 9);
+  return `perf-${now}-${performanceMetricCounter}-${randomSuffix}`;
+}
 
 // 模拟API延迟
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -707,10 +768,14 @@ export class MockAPI {
     }
 
     // 更新事件
+    const currentEvent = events[eventIndex];
+    if (!currentEvent) {
+      throw new Error(`事件不存在: ${eventId}`);
+    }
+    
     const updatedEvent: TrackingEvent = {
-      ...eventData,
-      ...events[eventIndex],
-      // 再次展开 eventData 以确保更新的字段覆盖原有字段（除了id和createdAt）
+      id: currentEvent.id,
+      createdAt: currentEvent.createdAt,
       name: eventData.name,
       description: eventData.description,
       type: eventData.type,
@@ -839,8 +904,13 @@ export class MockAPI {
   }
 
   // 新增：获取性能监控数据
-  static async getPerformanceMetrics(projectId: string): Promise<PerformanceMetric[]> {
+  static async getPerformanceMetrics(
+    projectId: string,
+  ): Promise<PerformanceMetric[]> {
     await delay(500); // 模拟网络延迟
+
+    // 清理重复的ID
+    this.cleanupDuplicatePerformanceMetrics(projectId);
 
     const metrics = mockPerformanceMetrics[projectId];
     if (!metrics) {
@@ -853,7 +923,7 @@ export class MockAPI {
   // 新增：添加性能监控数据
   static async addPerformanceMetric(
     projectId: string,
-    metric: Omit<PerformanceMetric, 'id'>
+    metric: Omit<PerformanceMetric, 'id'>,
   ): Promise<PerformanceMetric> {
     await delay(300); // 模拟网络延迟
 
@@ -862,8 +932,8 @@ export class MockAPI {
     }
 
     const newMetric: PerformanceMetric = {
-      id: `perf-${Date.now()}`,
-      ...metric
+      id: `perf-${Date.now()}-${++performanceMetricCounter}`,
+      ...metric,
     };
 
     mockPerformanceMetrics[projectId].unshift(newMetric); // 添加到开头
@@ -871,119 +941,208 @@ export class MockAPI {
     return newMetric;
   }
 
+  // 新增：清理重复的性能指标ID
+  static cleanupDuplicatePerformanceMetrics(projectId: string): void {
+    if (!mockPerformanceMetrics[projectId]) {
+      return;
+    }
+
+    const seen = new Set<string>();
+    mockPerformanceMetrics[projectId] = mockPerformanceMetrics[projectId].filter(metric => {
+      if (seen.has(metric.id)) {
+        console.warn(`删除重复的性能指标ID: ${metric.id}`);
+        return false;
+      }
+      seen.add(metric.id);
+      return true;
+    });
+  }
+
   // 新增：获取性能摘要数据
-  static async getPerformanceSummary(projectId: string): Promise<PerformanceSummary> {
+  static async getPerformanceSummary(
+    projectId: string,
+  ): Promise<PerformanceSummary> {
     await delay(400); // 模拟网络延迟
 
     const metrics = mockPerformanceMetrics[projectId] || [];
-    
-    const navigationMetrics = metrics.filter(m => m.type === 'navigation');
-    const webVitalsMetrics = metrics.filter(m => m.type === 'web_vitals');
-    const resourceMetrics = metrics.filter(m => m.type === 'resource');
+
+    const navigationMetrics = metrics.filter((m) => m.type === 'navigation');
+    const webVitalsMetrics = metrics.filter((m) => m.type === 'web_vitals');
+    const resourceMetrics = metrics.filter((m) => m.type === 'resource');
 
     // 评级函数
-    const getRating = (value: number, good: number, poor: number): 'good' | 'needs-improvement' | 'poor' => {
+    const getRating = (
+      value: number,
+      good: number,
+      poor: number,
+    ): 'good' | 'needs-improvement' | 'poor' => {
       if (value <= good) return 'good';
       if (value <= poor) return 'needs-improvement';
       return 'poor';
     };
 
     // 计算基础性能指标平均值
-    const avgLoadTime = navigationMetrics.length > 0 
-      ? navigationMetrics.reduce((sum, m) => sum + (m.loadTime || 0), 0) / navigationMetrics.length 
-      : 0;
-    
-    const avgDomContentLoaded = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.domContentLoaded || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgLoadTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce((sum, m) => sum + (m.loadTime || 0), 0) /
+          navigationMetrics.length
+        : 0;
 
-    const avgFirstPaint = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.firstPaint || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgDomContentLoaded =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.domContentLoaded || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
-    const avgFirstContentfulPaint = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.firstContentfulPaint || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgFirstPaint =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce((sum, m) => sum + (m.firstPaint || 0), 0) /
+          navigationMetrics.length
+        : 0;
 
-    const avgTimeToFirstByte = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.timeToFirstByte || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgFirstContentfulPaint =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.firstContentfulPaint || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
+
+    const avgTimeToFirstByte =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.timeToFirstByte || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
     // 计算交互性能指标平均值
-    const avgInteractionToNextPaint = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.interactionToNextPaint || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgInteractionToNextPaint =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.interactionToNextPaint || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
-    const avgTotalBlockingTime = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.totalBlockingTime || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgTotalBlockingTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.totalBlockingTime || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
-    const avgCumulativeLayoutShift = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.cumulativeLayoutShift || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgCumulativeLayoutShift =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.cumulativeLayoutShift || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
     // 计算补充性能指标平均值
-    const avgDnsTime = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.dnsTime || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgDnsTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce((sum, m) => sum + (m.dnsTime || 0), 0) /
+          navigationMetrics.length
+        : 0;
 
-    const avgTcpTime = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.tcpTime || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgTcpTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce((sum, m) => sum + (m.tcpTime || 0), 0) /
+          navigationMetrics.length
+        : 0;
 
-    const avgDomParseTime = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.domParseTime || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgDomParseTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce((sum, m) => sum + (m.domParseTime || 0), 0) /
+          navigationMetrics.length
+        : 0;
 
-    const avgFirstScreenTime = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.firstScreenTime || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgFirstScreenTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.firstScreenTime || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
-    const avgWhiteScreenTime = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.whiteScreenTime || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgWhiteScreenTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.whiteScreenTime || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
-    const avgResourceLoadTime = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.resourceLoadTime || 0), 0) / navigationMetrics.length
-      : 0;
+    const avgResourceLoadTime =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.resourceLoadTime || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
-    const totalLongTaskCount = navigationMetrics.reduce((sum, m) => sum + (m.longTaskCount || 0), 0);
-    const avgLongTaskDuration = navigationMetrics.length > 0
-      ? navigationMetrics.reduce((sum, m) => sum + (m.longTaskDuration || 0), 0) / navigationMetrics.length
-      : 0;
+    const totalLongTaskCount = navigationMetrics.reduce(
+      (sum, m) => sum + (m.longTaskCount || 0),
+      0,
+    );
+    const avgLongTaskDuration =
+      navigationMetrics.length > 0
+        ? navigationMetrics.reduce(
+            (sum, m) => sum + (m.longTaskDuration || 0),
+            0,
+          ) / navigationMetrics.length
+        : 0;
 
     // 计算 Web Vitals
-    const lcpMetrics = webVitalsMetrics.filter(m => m.metric === 'LCP');
-    const fidMetrics = webVitalsMetrics.filter(m => m.metric === 'FID');
-    const clsMetrics = webVitalsMetrics.filter(m => m.metric === 'CLS');
-    const inpMetrics = webVitalsMetrics.filter(m => m.metric === 'INP');
-    const tbtMetrics = webVitalsMetrics.filter(m => m.metric === 'TBT');
+    const lcpMetrics = webVitalsMetrics.filter((m) => m.metric === 'LCP');
+    const fidMetrics = webVitalsMetrics.filter((m) => m.metric === 'FID');
+    const clsMetrics = webVitalsMetrics.filter((m) => m.metric === 'CLS');
+    const inpMetrics = webVitalsMetrics.filter((m) => m.metric === 'INP');
+    const tbtMetrics = webVitalsMetrics.filter((m) => m.metric === 'TBT');
 
-    const avgLcp = lcpMetrics.length > 0 
-      ? lcpMetrics.reduce((sum, m) => sum + (m.value || 0), 0) / lcpMetrics.length 
-      : Math.round(avgFirstContentfulPaint * 1.5); // 如果没有LCP数据，估算值
+    const avgLcp =
+      lcpMetrics.length > 0
+        ? lcpMetrics.reduce((sum, m) => sum + (m.value || 0), 0) /
+          lcpMetrics.length
+        : Math.round(avgFirstContentfulPaint * 1.5); // 如果没有LCP数据，估算值
 
-    const avgFid = fidMetrics.length > 0 
-      ? fidMetrics.reduce((sum, m) => sum + (m.value || 0), 0) / fidMetrics.length 
-      : 0;
+    const avgFid =
+      fidMetrics.length > 0
+        ? fidMetrics.reduce((sum, m) => sum + (m.value || 0), 0) /
+          fidMetrics.length
+        : 0;
 
-    const avgClsFromWebVitals = clsMetrics.length > 0 
-      ? clsMetrics.reduce((sum, m) => sum + (m.value || 0), 0) / clsMetrics.length 
-      : avgCumulativeLayoutShift;
+    const avgClsFromWebVitals =
+      clsMetrics.length > 0
+        ? clsMetrics.reduce((sum, m) => sum + (m.value || 0), 0) /
+          clsMetrics.length
+        : avgCumulativeLayoutShift;
 
-    const avgInp = inpMetrics.length > 0 
-      ? inpMetrics.reduce((sum, m) => sum + (m.value || 0), 0) / inpMetrics.length 
-      : avgInteractionToNextPaint;
+    const avgInp =
+      inpMetrics.length > 0
+        ? inpMetrics.reduce((sum, m) => sum + (m.value || 0), 0) /
+          inpMetrics.length
+        : avgInteractionToNextPaint;
 
-    const avgTbt = tbtMetrics.length > 0 
-      ? tbtMetrics.reduce((sum, m) => sum + (m.value || 0), 0) / tbtMetrics.length 
-      : avgTotalBlockingTime;
+    const avgTbt =
+      tbtMetrics.length > 0
+        ? tbtMetrics.reduce((sum, m) => sum + (m.value || 0), 0) /
+          tbtMetrics.length
+        : avgTotalBlockingTime;
 
     // 计算资源统计
-    const totalBytes = resourceMetrics.reduce((sum, m) => sum + (m.transferSize || 0), 0);
+    const totalBytes = resourceMetrics.reduce(
+      (sum, m) => sum + (m.transferSize || 0),
+      0,
+    );
     const byType: Record<string, { count: number; bytes: number }> = {};
-    
-    resourceMetrics.forEach(m => {
+
+    resourceMetrics.forEach((m) => {
       const type = m.initiatorType || 'unknown';
       if (!byType[type]) {
         byType[type] = { count: 0, bytes: 0 };
@@ -991,6 +1150,61 @@ export class MockAPI {
       byType[type].count++;
       byType[type].bytes += m.transferSize || 0;
     });
+
+    // 计算API性能指标 - 筛选fetch类型的资源作为API调用
+    const apiMetrics = resourceMetrics.filter(
+      (m) => m.initiatorType === 'fetch' || m.initiatorType === 'xmlhttprequest'
+    );
+
+    // API调用总数
+    const totalApiCalls = apiMetrics.length;
+
+    // 平均响应时间
+    const avgApiResponseTime =
+      apiMetrics.length > 0
+        ? apiMetrics.reduce((sum, m) => sum + (m.duration || 0), 0) / apiMetrics.length
+        : 0;
+
+    // 成功率计算（假设响应时间大于0且小于30秒的为成功调用）
+    const successfulApiCalls = apiMetrics.filter(
+      (m) => (m.duration || 0) > 0 && (m.duration || 0) < 30000
+    );
+    const successRate = totalApiCalls > 0 ? (successfulApiCalls.length / totalApiCalls) * 100 : 100;
+
+    // 最慢和最快的API
+    const slowestApi = apiMetrics.length > 0
+      ? apiMetrics.reduce((slowest, current) =>
+          (current.duration || 0) > (slowest.duration || 0) ? current : slowest
+        )
+      : null;
+
+    const fastestApi = apiMetrics.length > 0
+      ? apiMetrics.reduce((fastest, current) =>
+          (current.duration || 0) < (fastest.duration || 0) ? current : fastest
+        )
+      : null;
+
+    // 95分位响应时间
+    const sortedApiDurations = apiMetrics
+      .map((m) => m.duration || 0)
+      .filter((d) => d > 0)
+      .sort((a, b) => a - b);
+    const p95ResponseTime =
+      sortedApiDurations.length > 0
+        ? sortedApiDurations[Math.floor(sortedApiDurations.length * 0.95)]
+        : 0;
+
+    // 错误率（响应时间超过30秒或者为0的视为错误）
+    const errorApiCalls = apiMetrics.filter(
+      (m) => (m.duration || 0) === 0 || (m.duration || 0) >= 30000
+    );
+    const errorRate = totalApiCalls > 0 ? (errorApiCalls.length / totalApiCalls) * 100 : 0;
+
+    // 吞吐量（每秒请求数，基于时间跨度估算）
+    const timeSpanMs = apiMetrics.length > 1 
+      ? Math.abs(new Date(apiMetrics[0]?.timestamp || Date.now()).getTime() - new Date(apiMetrics[apiMetrics.length - 1]?.timestamp || Date.now()).getTime())
+      : 60000; // 默认1分钟
+    const throughput = timeSpanMs > 0 ? (totalApiCalls / (timeSpanMs / 1000)) : 0;
 
     return {
       totalMetrics: metrics.length,
@@ -1001,97 +1215,125 @@ export class MockAPI {
       averageTimeToFirstByte: Math.round(avgTimeToFirstByte),
       // 核心性能指标
       coreMetrics: {
-        fp: { 
-          value: Math.round(avgFirstPaint), 
-          rating: getRating(avgFirstPaint, 1000, 3000)
+        fp: {
+          value: Math.round(avgFirstPaint),
+          rating: getRating(avgFirstPaint, 1000, 3000),
         },
-        fcp: { 
-          value: Math.round(avgFirstContentfulPaint), 
-          rating: getRating(avgFirstContentfulPaint, 1800, 3000)
+        fcp: {
+          value: Math.round(avgFirstContentfulPaint),
+          rating: getRating(avgFirstContentfulPaint, 1800, 3000),
         },
-        lcp: { 
-          value: Math.round(avgLcp), 
-          rating: getRating(avgLcp, 2500, 4000)
+        lcp: {
+          value: Math.round(avgLcp),
+          rating: getRating(avgLcp, 2500, 4000),
         },
-        ttfb: { 
-          value: Math.round(avgTimeToFirstByte), 
-          rating: getRating(avgTimeToFirstByte, 800, 1800)
-        }
+        ttfb: {
+          value: Math.round(avgTimeToFirstByte),
+          rating: getRating(avgTimeToFirstByte, 800, 1800),
+        },
       },
       // 交互性能指标
       interactionMetrics: {
-        inp: { 
-          value: Math.round(avgInp), 
-          rating: getRating(avgInp, 200, 500)
+        inp: {
+          value: Math.round(avgInp),
+          rating: getRating(avgInp, 200, 500),
         },
-        tbt: { 
-          value: Math.round(avgTbt), 
-          rating: getRating(avgTbt, 200, 600)
+        tbt: {
+          value: Math.round(avgTbt),
+          rating: getRating(avgTbt, 200, 600),
         },
-        cls: { 
-          value: Math.round(avgClsFromWebVitals * 1000) / 1000, 
-          rating: getRating(avgClsFromWebVitals, 0.1, 0.25)
-        }
+        cls: {
+          value: Math.round(avgClsFromWebVitals * 1000) / 1000,
+          rating: getRating(avgClsFromWebVitals, 0.1, 0.25),
+        },
       },
       // 补充性能指标
       supplementaryMetrics: {
-        dns: { 
-          value: Math.round(avgDnsTime), 
-          rating: getRating(avgDnsTime, 100, 300)
+        dns: {
+          value: Math.round(avgDnsTime),
+          rating: getRating(avgDnsTime, 100, 300),
         },
-        tcp: { 
-          value: Math.round(avgTcpTime), 
-          rating: getRating(avgTcpTime, 100, 300)
+        tcp: {
+          value: Math.round(avgTcpTime),
+          rating: getRating(avgTcpTime, 100, 300),
         },
-        dom: { 
-          value: Math.round(avgDomParseTime), 
-          rating: getRating(avgDomParseTime, 200, 500)
+        dom: {
+          value: Math.round(avgDomParseTime),
+          rating: getRating(avgDomParseTime, 200, 500),
         },
-        firstScreen: { 
-          value: Math.round(avgFirstScreenTime), 
-          rating: getRating(avgFirstScreenTime, 1000, 2000)
+        firstScreen: {
+          value: Math.round(avgFirstScreenTime),
+          rating: getRating(avgFirstScreenTime, 1000, 2000),
         },
-        whiteScreen: { 
-          value: Math.round(avgWhiteScreenTime), 
-          rating: getRating(avgWhiteScreenTime, 200, 500)
+        whiteScreen: {
+          value: Math.round(avgWhiteScreenTime),
+          rating: getRating(avgWhiteScreenTime, 200, 500),
         },
-        resourceLoad: { 
-          value: Math.round(avgResourceLoadTime), 
-          rating: getRating(avgResourceLoadTime, 300, 800)
+        resourceLoad: {
+          value: Math.round(avgResourceLoadTime),
+          rating: getRating(avgResourceLoadTime, 300, 800),
         },
-        longTask: { 
-          count: totalLongTaskCount, 
-          duration: Math.round(avgLongTaskDuration), 
-          rating: getRating(totalLongTaskCount, 2, 5)
-        }
+        longTask: {
+          count: totalLongTaskCount,
+          duration: Math.round(avgLongTaskDuration),
+          rating: getRating(totalLongTaskCount, 2, 5),
+        },
       },
       webVitals: {
-        lcp: { 
-          value: Math.round(avgLcp), 
-          rating: getRating(avgLcp, 2500, 4000)
+        lcp: {
+          value: Math.round(avgLcp),
+          rating: getRating(avgLcp, 2500, 4000),
         },
-        fid: { 
-          value: Math.round(avgFid), 
-          rating: getRating(avgFid, 100, 300)
+        fid: {
+          value: Math.round(avgFid),
+          rating: getRating(avgFid, 100, 300),
         },
-        cls: { 
-          value: Math.round(avgClsFromWebVitals * 1000) / 1000, 
-          rating: getRating(avgClsFromWebVitals, 0.1, 0.25)
+        cls: {
+          value: Math.round(avgClsFromWebVitals * 1000) / 1000,
+          rating: getRating(avgClsFromWebVitals, 0.1, 0.25),
         },
-        inp: { 
-          value: Math.round(avgInp), 
-          rating: getRating(avgInp, 200, 500)
+        inp: {
+          value: Math.round(avgInp),
+          rating: getRating(avgInp, 200, 500),
         },
-        tbt: { 
-          value: Math.round(avgTbt), 
-          rating: getRating(avgTbt, 200, 600)
-        }
+        tbt: {
+          value: Math.round(avgTbt),
+          rating: getRating(avgTbt, 200, 600),
+        },
       },
       resourceStats: {
         totalResources: resourceMetrics.length,
         totalBytes,
-        byType
-      }
+        byType,
+      },
+      // API接口性能指标
+      apiPerformance: {
+        totalApiCalls,
+        averageResponseTime: Math.round(avgApiResponseTime),
+        successRate: Math.round(successRate * 100) / 100, // 保留两位小数
+        slowestApi: {
+          name: slowestApi?.name?.split('/').pop() || 'N/A',
+          duration: Math.round(slowestApi?.duration || 0),
+          rating: getRating(slowestApi?.duration || 0, 500, 2000),
+        },
+        fastestApi: {
+          name: fastestApi?.name?.split('/').pop() || 'N/A',
+          duration: Math.round(fastestApi?.duration || 0),
+          rating: getRating(fastestApi?.duration || 0, 500, 2000),
+        },
+        p95ResponseTime: {
+          value: Math.round(p95ResponseTime || 0),
+          rating: getRating(p95ResponseTime || 0, 1000, 3000),
+        },
+        errorRate: {
+          value: Math.round(errorRate * 100) / 100, // 保留两位小数
+          rating: getRating(errorRate, 1, 5), // 错误率: 1%以下为good, 5%以下为needs-improvement
+        },
+        throughput: {
+          value: Math.round(throughput * 100) / 100, // 保留两位小数
+          rating: getRating(throughput, 10, 5), // 吞吐量: 10 req/s以上为good, 5 req/s以上为needs-improvement
+        },
+      },
     };
   }
 }
